@@ -1,0 +1,83 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id                 String               @id @default(cuid())
+  name               String?
+  email              String?              @unique
+  emailVerified      DateTime?            @map("email_verified")
+  password           String?
+  phoneNumber        String               @unique
+  VerificationToken  VerificationToken[]
+  PasswordResetToken PasswordResetToken[]
+  CropSuggestion     CropSuggestion[]
+  createdAt          DateTime             @default(now())
+  updatedAt          DateTime             @updatedAt
+  Address            Address?
+
+  @@map("users")
+}
+
+model Address {
+  id          String   @id @default(cuid())
+  state       String
+  district    String
+  addressLine String
+  village     String
+  userId      String
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  pincode     String
+  created_at  DateTime @default(now())
+  updated_at  DateTime @updatedAt
+
+  @@unique([userId])
+}
+
+model CropSuggestion {
+  id          String   @id @default(cuid())
+  userId      String
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  nitrogen    Float
+  Potassium   Float
+  Phosphorus  Float
+  pH          Float
+  district    String
+  village     String
+  soilQuality String
+  prediction  String
+  suggestedAt DateTime @default(now())
+}
+
+model ContactForm {
+  id           String  @id @default(cuid())
+  name         String
+  email        String
+  message      String
+  isSystemUser Boolean
+}
+
+model VerificationToken {
+  id        String   @id @default(cuid())
+  email     String
+  token     String   @unique
+  expiresAt DateTime
+  user      User     @relation(fields: [email], references: [email], onDelete: Cascade)
+
+  @@unique([email, token])
+}
+
+model PasswordResetToken {
+  id        String   @id @default(cuid())
+  email     String
+  token     String   @unique
+  expiresAt DateTime
+  user      User     @relation(fields: [email], references: [email], onDelete: Cascade)
+
+  @@unique([email, token])
+}
