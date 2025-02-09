@@ -10,12 +10,12 @@ import { Input } from "@/components/ui/input"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { crsRequestSchema, validateFields } from "@/schemas/auth-schemas"
 import { useToast } from "@/hooks/use-toast"
-import { useSession } from "next-auth/react"
+import { useSessionContext } from "@/context/session"
 
 
 
 export default function CropRecommendationForm() {
-  const { data } = useSession()
+  const { session } = useSessionContext();
   const { toast } = useToast()
   const [isPending, startTransition] = useTransition()
 
@@ -41,7 +41,7 @@ export default function CropRecommendationForm() {
         const response = await axios.post(`${process.env.NEXT_PUBLIC_ML_MODEL_URL!}`, validatedData)
         setResult(response.data.Success.prediction)
 
-        await axios.post(`/api/recommendation-result?userId=${data?.user.id}`, {
+        await axios.post(`/api/recommendation-result?userId=${session?.user.id}`, {
           ...validatedData,
           prediction: response.data.Success.prediction
         })

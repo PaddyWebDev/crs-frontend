@@ -1,16 +1,15 @@
 "use client"
 import React, { useEffect, useState } from 'react';
 import { Sun, Wind, Droplets, Thermometer, CloudSun } from 'lucide-react';
-
 import { Card, CardContent } from '@/components/ui/card';
 import { getVillageOfUser, getWeatherDetails } from '@/hooks/user-hooks';
 import Image from 'next/image';
-import { useSession } from 'next-auth/react';
 import { useToast } from '@/hooks/use-toast';
+import { useSessionContext } from '@/context/session';
 export default function WeatherForecastComponent() {
   const { toast } = useToast();
+  const { session:data } = useSessionContext();
 
-  const { data } = useSession()
 
   const [weatherData, setWeatherData] = useState<any>(null)
 
