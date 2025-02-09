@@ -222,7 +222,7 @@ export default function CropRecommendationForm() {
         {
           Result && (
             <div className='flex flex-col items-center border p-10 rounded-md'>
-              <h2 className="text-lg font-bold text-neutral-900 dark:bg-neutral-50">Result</h2>
+              <h2 className="text-lg font-bold text-neutral-900 dark:text-neutral-50">Result</h2>
               <p className='font-light'><strong >{Result}</strong> is your predicted Result</p>
             </div>
           )
