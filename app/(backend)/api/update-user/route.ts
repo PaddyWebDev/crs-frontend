@@ -15,8 +15,7 @@ export async function PUT(request: NextRequest) {
       );
     }
 
-
-    if (!await getUserById(userId)) {
+    if (!(await getUserById(userId))) {
       return new NextResponse("User Doesn't Exist", {
         status: 404,
       });
@@ -32,10 +31,10 @@ export async function PUT(request: NextRequest) {
         phoneNumber: phoneNumber,
         Address: {
           update: {
-            address: addressLine,
-            district: district,
-            state: state,
-            pincode: pincode,
+            addressLine,
+            district,
+            state,
+            pincode,
           },
         },
       },
