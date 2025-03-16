@@ -38,7 +38,7 @@ export default function EditProfile({ user, userId }: EditProfileProps) {
             phoneNumber: user.phoneNumber,
             state: user.Address.state,
             district: user.Address.district,
-            addressLine: user.Address.address,
+            addressLine: user.Address.addressLine,
             pincode: user.Address.pincode,
             village: user.Address.village
         }
