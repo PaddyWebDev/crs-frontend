@@ -42,7 +42,7 @@ export async function sendResetPassEmail(
   if (!existingUser) throw new Error("Email Not Found");
   const passwordResetToken = await generatePasswordResetToken(email);
 
-  const resetLink = `${process.env.AUTH_TRUST_HOST}/reset-password?token=${passwordResetToken.token}`;
+  const resetLink = `${process.env.AUTH_TRUST_HOST}/guest/reset-password?token=${passwordResetToken.token}`;
 
   await transporter.sendMail({
     to:  passwordResetToken.email,
@@ -52,15 +52,3 @@ export async function sendResetPassEmail(
   return "Reset Email Sent!";
 }
 
-export async function sendTwoFactorEmail(
-  email: string,
-  token: string
-): Promise<string> {
-  await transporter.sendMail({
-    to: email,
-    subject: "Reset your password",
-    html: `<p> Your 2FA code: ${token}</p>`,
-  });
-
-  return "Email Sent!";
-}
