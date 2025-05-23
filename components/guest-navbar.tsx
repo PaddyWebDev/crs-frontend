@@ -5,10 +5,6 @@ import { Button } from "@/components/ui/button"
 import {  Menu } from "lucide-react"
 import Link from 'next/link'
 
-
-import { useRouter } from 'next/navigation'
-
-
 type NavLink = {
     name: string;
     route: string
@@ -38,7 +34,7 @@ export default function GuestNavbar() {
 
     return (
         <header
-            className='fixed top-0  z-50 w-full shadow-sm border-b bg-neutral-100 dark:bg-neutral-900 dark:border-gray-800/60 border-neutral-50/60'
+            className='fixed top-0  z-50 w-full shadow-sm border-b bg-neutral-100 dark:bg-neutral-900 dark:border-gray-800/60 border-neutral-100'
         >
             <div className=" px-4   mx-5 ">
                 <div className="flex justify-between py-4 ">
@@ -46,7 +42,7 @@ export default function GuestNavbar() {
                         <div
                             className="group cursor-default inline-flex items-center gap-2 text-lg font-bold tracking-wide text-neutral-900 hover:text-neutral-600 dark:text-neutral-100 dark:hover:text-neutral-300"
                         >
-                            <h1 className='dark:text-neutral-300 text-neutral-600 lg:leading-tighter  tracking-tighter font-bold text-lg'>CRS</h1>
+                            <h1 className='dark:text-neutral-300 text-neutral-600 lg:leading-tighter  tracking-tighter font-bold text-lg'>Flavor Finder</h1>
                         </div>
                     </div>
 

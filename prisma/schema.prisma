@@ -7,51 +7,26 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+enum Gender {
+  MALE
+  FEMALE
+  OTHER
+}
+
 model User {
   id                 String               @id @default(cuid())
-  name               String?
-  email              String?              @unique
+  name               String
+  email              String               @unique
   emailVerified      DateTime?            @map("email_verified")
-  password           String?
+  password           String
   phoneNumber        String               @unique
-  VerificationToken  VerificationToken[]
-  PasswordResetToken PasswordResetToken[]
-  CropSuggestion     CropSuggestion[]
+  gender             Gender
   createdAt          DateTime             @default(now())
   updatedAt          DateTime             @updatedAt
-  Address            Address?
+  VerificationToken  VerificationToken[]
+  PasswordResetToken PasswordResetToken[]
 
   @@map("users")
-}
-
-model Address {
-  id          String   @id @default(cuid())
-  state       String
-  district    String
-  addressLine String
-  village     String
-  userId      String
-  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  pincode     String
-  created_at  DateTime @default(now())
-  updated_at  DateTime @updatedAt
-
-  @@unique([userId])
-}
-
-model CropSuggestion {
-  id          String   @id @default(cuid())
-  userId      String
-  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  nitrogen    Float
-  Potassium   Float
-  Phosphorus  Float
-  pH          Float
-  district    String
-  village     String
-  soilQuality String
-  prediction  String
-  suggestedAt DateTime @default(now())
 }
 
 model ContactForm {
@@ -60,6 +35,14 @@ model ContactForm {
   email        String
   message      String
   isSystemUser Boolean
+
+  @@map("contact")
+}
+
+model RecipeRecommendation {
+  id          String   @id @default(cuid())
+  recipeName  String
+  suggestedAt DateTime @default(now())
 }
 
 model VerificationToken {
@@ -80,4 +63,19 @@ model PasswordResetToken {
   user      User     @relation(fields: [email], references: [email], onDelete: Cascade)
 
   @@unique([email, token])
+}
+
+model Recipe {
+  id              String    @id @default(cuid())
+  name            String
+  ingredients     String
+  instructions    String
+  url             String?
+  cuisine         String?
+  course          String?
+  diet            String?
+  prepTimeInMins  Int?
+  cookTimeInMins  Int?
+  totalTimeInMins Int?
+  servings        Int?
 }

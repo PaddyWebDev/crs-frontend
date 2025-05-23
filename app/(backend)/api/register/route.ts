@@ -13,11 +13,7 @@ export async function POST(request: NextRequest) {
       email,
       password,
       phoneNumber,
-      state,
-      district,
-      addressLine,
-      pincode,
-      village,
+      gender
     } = await request.json();
     const hashPassword = await bcryptjs.hash(password, 10);
     if (await getUserByEmail(email)) {
@@ -29,18 +25,7 @@ export async function POST(request: NextRequest) {
         email,
         password: hashPassword,
         phoneNumber: phoneNumber,
-        Address: {
-          create: {
-            village,
-            state,
-            district,
-            addressLine: addressLine,
-            pincode,
-          },
-        },
-      },
-      include: {
-        Address: true, // Include the created address in the result
+        gender
       },
     });
 

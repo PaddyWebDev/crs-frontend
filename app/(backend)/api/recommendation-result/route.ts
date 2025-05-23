@@ -10,23 +10,8 @@ export async function POST(req: NextRequest) {
         status: 400,
       });
     }
-    const { n, p, k, ph, soil_quality, district, village, prediction } =
-      await req.json();
-
-    await db.cropSuggestion.create({
-      data: {
-        nitrogen: n,
-        Phosphorus: p,
-        Potassium: k,
-        pH: ph,
-        village: village,
-        district: district,
-        soilQuality: soil_quality,
-        prediction: prediction,
-        userId,
-       
-      },
-    });
+   
+  
     return new NextResponse("Success", { status: 200 });
   } catch (error: any) {
     return new NextResponse("Internal Server Error", { status: 500 });

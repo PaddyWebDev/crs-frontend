@@ -1,0 +1,72 @@
+import ExcelJS from 'exceljs';
+import { NextRequest, NextResponse } from 'next/server';
+import path from 'path';
+
+interface RecipeRow {
+    translatedName?: string;
+    ingredients: string;
+    instructions: string;
+    url?: string;
+    cuisine?: string;
+    course?: string;
+    diet?: string;
+    prepTimeInMins?: number;
+    cookTimeInMins?: number;
+    totalTimeInMins?: number;
+    servings?: number;
+}
+export async function POST(req: NextRequest) {
+    try {
+        // const workbook = new ExcelJS.Workbook();
+        // await workbook.xlsx.readFile('./public/recipe-dataset/IndianFoodDatasetXLS.xlsx');
+        // const worksheet = workbook.worksheets[0];
+
+        // const recipes: RecipeRow[] = [];
+        // worksheet.eachRow((row, rowNumber) => {
+        //     if (rowNumber === 1) return; // Skip header row
+
+        //     const values = row.values as Array<string | number | undefined>;
+
+        //     recipes.push({
+        //         translatedName: String(values[3] ?? ''),
+        //         ingredients: String(values[5] ?? ''),
+        //         instructions: String(values[14] ?? ''),
+        //         url: String(values[15]?.hyperlink ?? ''),
+        //         cuisine: String(values[10] ?? ''),
+        //         course: String(values[11] ?? ''),
+        //         diet: String(values[12] ?? ''),
+        //         prepTimeInMins: Number(values[6]) || 0,
+        //         cookTimeInMins: Number(values[7]) || 0,
+        //         totalTimeInMins: Number(values[8]) || 0,
+        //         servings: Number(values[9]) || 0,
+        //     });
+        // });
+
+
+        // for (const recipe of recipes) {
+        //     await prisma.recipe.create({
+        //         data: {
+        //             name: recipe.translatedName!,
+        //             ingredients: recipe.ingredients,
+        //             instructions: recipe.instructions,
+        //             url: recipe.url,
+        //             cuisine: recipe.cuisine,
+        //             course: recipe.course,
+        //             diet: recipe.diet,
+        //             prepTimeInMins: recipe.prepTimeInMins,
+        //             cookTimeInMins: recipe.cookTimeInMins,
+        //             totalTimeInMins: recipe.totalTimeInMins,
+        //             servings: recipe.servings,
+        //         }
+        //     });
+        // }
+
+
+        // return new NextResponse("Done", {
+        //     status: 200
+        // })
+
+    } catch (error) {
+        console.log(error)
+    }
+}

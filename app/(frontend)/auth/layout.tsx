@@ -1,7 +1,8 @@
 import { auth } from '@/auth'
-import Navbar from '@/components/auth-navbar'
 import React from 'react'
 import { SessionProvider } from "@/context/session"; // Import Context
+import Sidebar from '@/components/auth-sidebar';
+import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 
 interface AuthLayoutProps {
     children: React.ReactNode
@@ -10,11 +11,16 @@ interface AuthLayoutProps {
 export default async function AuthLayout({ children }: AuthLayoutProps) {
     const session = await auth()
     return (
-        <SessionProvider session={session}>
-            <main>
-                <Navbar userName={session?.user.name!} />
-                {children}
-            </main>
-        </SessionProvider>
+        <SidebarProvider>
+            <SessionProvider session={session}>
+                <main className='w-full'>
+                    <aside className="md:w-64">
+                        <Sidebar userId={session?.user.id!} userName={session?.user.name!} />
+                    </aside>
+                    <SidebarTrigger />
+                    {children}
+                </main>
+            </SessionProvider>
+        </SidebarProvider>
     )
 }

@@ -29,16 +29,8 @@ export async function PUT(request: NextRequest) {
         name: name,
         email: email,
         phoneNumber: phoneNumber,
-        Address: {
-          update: {
-            addressLine,
-            district,
-            state,
-            pincode,
-          },
-        },
+
       },
-      include: { Address: true },
     });
     return NextResponse.json({
       success: true,

@@ -9,10 +9,19 @@ import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, For
 import { Input } from "@/components/ui/input"
 import { Card, CardContent, CardFooter } from "@/components/ui/card"
 import { registerSchema, validateFields } from "@/schemas/auth-schemas"
-import { Checkbox } from "@/components/ui/checkbox"
+import {
+    Select,
+    SelectContent,
+    SelectGroup,
+    SelectItem,
+    SelectLabel,
+    SelectTrigger,
+    SelectValue,
+} from "@/components/ui/select"
 import axios from "axios"
 import { useToast } from "@/hooks/use-toast"
 import Link from "next/link"
+import { Checkbox } from "@/components/ui/checkbox"
 
 
 export default function RegisterForm() {
@@ -28,17 +37,23 @@ export default function RegisterForm() {
             phoneNumber: "",
             password: "",
             confirmPassword: "",
-            state: "",
-            district: "",
-            addressLine: "",
-            pincode: "",
-            village: "",
+            gender: "",
         },
     })
 
     async function onSubmit(values: z.infer<typeof registerSchema>) {
         startTransition(async function () {
             const validatedFields = validateFields(values, registerSchema);
+            if (validatedFields.password !== validatedFields.confirmPassword) {
+                form.setError("confirmPassword", {
+                    type: "custom",
+                    message: "Password Doesn't Match"
+                })
+
+                return;
+            }
+
+
             await axios.post("/api/register", validatedFields)
                 .then((data: any) => {
                     toast({
@@ -118,12 +133,38 @@ export default function RegisterForm() {
                                 />
                                 <FormField
                                     control={form.control}
-                                    name="state"
+                                    name="gender"
                                     render={({ field }) => (
                                         <FormItem>
-                                            <FormLabel>State</FormLabel>
+                                            <FormLabel>Gender</FormLabel>
                                             <FormControl>
-                                                <Input placeholder="Your State"
+                                                <Select onValueChange={field.onChange} defaultValue={field.value} disabled={isPending}
+                                                    {...field}>
+                                                    <SelectTrigger className="bg-neutral-50 border-neutral-300">
+                                                        <SelectValue placeholder="Select your gender" />
+                                                    </SelectTrigger>
+                                                    <SelectContent>
+                                                        <SelectGroup>
+                                                            <SelectLabel>Gender</SelectLabel>
+                                                            <SelectItem value="MALE">Male</SelectItem>
+                                                            <SelectItem value="FEMALE">Female</SelectItem>
+                                                            <SelectItem value="OTHER">Other</SelectItem>
+                                                        </SelectGroup>
+                                                    </SelectContent>
+                                                </Select>
+                                            </FormControl>
+                                            <FormMessage />
+                                        </FormItem>
+                                    )}
+                                />
+                                <FormField
+                                    control={form.control}
+                                    name="password"
+                                    render={({ field }) => (
+                                        <FormItem>
+                                            <FormLabel>Password</FormLabel>
+                                            <FormControl>
+                                                <Input type={passwordState ? "text" : "password"} placeholder="*********"
                                                     disabled={isPending}
                                                     {...field} className="bg-neutral-50 border-neutral-300" />
                                             </FormControl>
@@ -131,121 +172,34 @@ export default function RegisterForm() {
                                         </FormItem>
                                     )}
                                 />
+                                <FormField
+                                    control={form.control}
+                                    name="confirmPassword"
+                                    render={({ field }) => (
+                                        <FormItem>
+                                            <FormLabel>Confirm Password</FormLabel>
+                                            <FormControl>
+                                                <Input placeholder="**********"
+                                                    type={passwordState ? "text" : "password"}
+                                                    disabled={isPending}
+                                                    {...field} className="bg-neutral-50 border-neutral-300" />
+                                            </FormControl>
+                                            <FormMessage />
+                                        </FormItem>
+                                    )}
+                                />
+
                             </div>
-                            <div className="space-y-4">
-
-                                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 ">
-                                    <FormField
-                                        control={form.control}
-                                        name="addressLine"
-                                        render={({ field }) => (
-                                            <FormItem>
-                                                <FormLabel>AddressLine</FormLabel>
-                                                <FormControl>
-                                                    <Input placeholder="Your Village"
-                                                        disabled={isPending}
-                                                        {...field} className="bg-neutral-50 border-neutral-300 h-10" />
-                                                </FormControl>
-                                                <FormMessage />
-                                            </FormItem>
-                                        )}
-                                    />
-                                    <FormField
-                                        control={form.control}
-                                        name="village"
-                                        render={({ field }) => (
-                                            <FormItem>
-                                                <FormLabel>Village</FormLabel>
-                                                <FormControl>
-                                                    <Input placeholder="Your Village"
-                                                        disabled={isPending}
-                                                        {...field} className="bg-neutral-50 border-neutral-300 h-10" />
-                                                </FormControl>
-                                                <FormMessage />
-                                            </FormItem>
-                                        )}
-                                    />
-
-                                    <FormField
-                                        control={form.control}
-                                        name="district"
-                                        render={({ field }) => (
-                                            <FormItem>
-                                                <FormLabel>District</FormLabel>
-                                                <FormControl>
-                                                    <Input placeholder="Your District"
-                                                        disabled={isPending}
-                                                        {...field} className="bg-neutral-50 border-neutral-300" />
-                                                </FormControl>
-                                                <FormMessage />
-                                            </FormItem>
-                                        )}
-                                    />
-
-                                    <FormField
-                                        control={form.control}
-                                        name="pincode"
-                                        render={({ field }) => (
-                                            <FormItem>
-                                                <FormLabel>Pincode</FormLabel>
-                                                <FormControl>
-                                                    <Input
-                                                        disabled={isPending}
-                                                        placeholder="123456"
-                                                        {...field} className="bg-neutral-50 border-neutral-300" />
-                                                </FormControl>
-                                                <FormMessage />
-                                            </FormItem>
-                                        )}
-                                    />
-
-
-                                    <FormField
-                                        control={form.control}
-                                        name="password"
-                                        render={({ field }) => (
-                                            <FormItem>
-                                                <FormLabel>Password</FormLabel>
-                                                <FormControl>
-                                                    <Input
-                                                        type={passwordState ? "text" : "password"}
-                                                        disabled={isPending}
-                                                        placeholder="********"
-                                                        {...field}
-                                                        className="bg-neutral-50 border-neutral-300"
-                                                    />
-                                                </FormControl>
-                                                <FormMessage />
-                                            </FormItem>
-                                        )}
-                                    />
-
-                                    <FormField
-                                        control={form.control}
-                                        name="confirmPassword"
-                                        render={({ field }) => (
-                                            <FormItem>
-                                                <FormLabel >
-                                                    Password
-                                                </FormLabel>
-                                                <FormControl>
-                                                    <Input disabled={isPending} placeholder="********" className="bg-neutral-50 border-neutral-300" type={passwordState ? "text" : "password"} {...field} />
-                                                </FormControl>
-                                                <FormMessage />
-                                            </FormItem>
-                                        )}
-                                    />
-                                    <div className="flex items-center space-x-2 mt-5">
-                                        <Checkbox id="showPassword" onClick={() => setPasswordState(!passwordState)} />
-                                        <label
-                                            htmlFor="showPassword"
-                                            className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                                        >
-                                            Show Password
-                                        </label>
-                                    </div>
-                                </div>
+                            <div className="flex items-center space-x-2">
+                                <Checkbox id="showPassword" onClick={() => setPasswordState(!passwordState)} />
+                                <label
+                                    htmlFor="showPassword"
+                                    className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                                >
+                                    Show Password
+                                </label>
                             </div>
+
                             <div className="flex justify-center mt-4">
                                 <Button
                                     type="submit"

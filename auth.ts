@@ -8,7 +8,6 @@ import bcryptjs from "bcryptjs";
 
 export type ExtendedUser = DefaultSession["user"] & {
   id: string;
-  // role: userRole;
 };
 
 declare module "next-auth" {
@@ -54,9 +53,6 @@ export const {
         session.user.id = token.sub;
       }
 
-      // if (token.role && session.user) {
-      //   session.user.role = token.role as userRole;
-      // }
       return session;
     },
     async jwt({ token, user, trigger, session }) {
@@ -68,14 +64,11 @@ export const {
 
       const existingUser = await getUserById(token.sub);
       if (!existingUser) return token;
-
-      // token.role = existingUser.role;
       return token;
     },
   },
   adapter: PrismaAdapter(db),
   session: { strategy: "jwt" },
-  // ...AuthConfig,
 
   providers: [
     Credentials({

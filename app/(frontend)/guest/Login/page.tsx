@@ -16,17 +16,17 @@ import { useToast } from '@/hooks/use-toast'
 
 
 export default function Login() {
-        const { toast } = useToast()
-        const router = useRouter()
-        const [isPending, startTransition] = useTransition()
-        const [passwordState, setPasswordState] = useState<boolean>(false)
-        const form = useForm<z.infer<typeof LoginSchema>>({
-            resolver: zodResolver(LoginSchema),
-            defaultValues: {
-                email: "",
-                password: ""
-            }
-        })
+    const { toast } = useToast()
+    const router = useRouter()
+    const [isPending, startTransition] = useTransition()
+    const [passwordState, setPasswordState] = useState<boolean>(false)
+    const form = useForm<z.infer<typeof LoginSchema>>({
+        resolver: zodResolver(LoginSchema),
+        defaultValues: {
+            email: "",
+            password: ""
+        }
+    })
 
 
 
@@ -38,10 +38,18 @@ export default function Login() {
                     toast({
                         title: "Success",
                         description: data.data,
-                        variant:"success"
+                        variant: "success",
                     })
                     router.push(DEFAULT_LOGIN_REDIRECT)
                 }).catch((error) => {
+                    if ((error.status === 404) || (error.status === 401) || (error.status === 403)) {
+                        form.setError((error.status === 404) ? "email" : "password", {
+                            type: "custom",
+                            message: error.response.data
+                        })
+                        return
+                    }
+
                     toast({
                         title: "Error Occurred",
                         description: error.response.data,
@@ -56,7 +64,7 @@ export default function Login() {
         <section className='space-y-6 dark:bg-zinc-800 bg-zinc-100 shadow-md p-5 md:w-[25rem] rounded '>
             <div className=' text-center'>
                 <h1 className={"text-4xl font-semibold drop-shadow-md"}>
-                    CRS
+                    Flavor Finder
                 </h1>
                 <h3 className='text-sm font-normal'>Welcome Back</h3>
             </div>
